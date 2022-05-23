@@ -25,13 +25,13 @@ class CustomAdminSite(admin.AdminSite):
         app_list = super().get_app_list(request)
         app_list += [
             {
-                "name": "My Custom App",
-                "app_label": "my_test_app",
+                "name": "Django Restic",
+                "app_label": "django_restic",
                 # "app_url": "/admin/test_view",
                 "models": [
                     {
                         "name": "django_restic",
-                        "object_name": tcptraceroute,
+                        "object_name": "django_restic",
                         "admin_url": "/admin/django_restic/",
                         "view_only": True,
                     }
