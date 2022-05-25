@@ -5,12 +5,11 @@ from django.contrib import messages
 from django.shortcuts import render, redirect
 
 from . import restic_installer
-
+from . import forms as restic_forms
 
 class Restic(views.generic.ListView):
     admin = {}
     def get(self, request):
-        breakpoint()
         repos = []
         repos_ctx = {}
         if not restic_installer.restic_check():
@@ -22,7 +21,7 @@ class Restic(views.generic.ListView):
         try:
             repos = conf.settings.RESTIC_REPOS
         except AttributeError:
-            messages.add_message(request, messages.WARNING, 'No repos are defined in settings.py')
+            pass
         if not len(repos):
             messages.add_message(request, messages.WARNING, 'No repos are defined - settings.RESTIC_REPOS is empty')
         else:
@@ -30,9 +29,12 @@ class Restic(views.generic.ListView):
                 restic.repository = repo['path']
                 #restic.password_file = io.StringIO(repo['password'])
                 os.environ["RESTIC_PASSWORD"] = repo['password']
-                snapshots = json.load(restic.snapshots(group_by='host'))['snapshots']
-                repos_ctx[repo['path']] = snapshots
-
-            breakpoint()
-        ctx = dict(self.admin.each_context(request), title='Django Restic',)
+                if restic.check() == None:
+                    restic.init()
+                    repos_ctx[repo['path']] = None
+                else:
+                    repos_ctx[repo['path']] = restic.snapshots(group_by='host')
+                    repos_form = restic_forms.Restic(repos=repos_ctx)    
+            
+        ctx = dict(self.admin.each_context(request), title='Django Restic', form=repos_form)
         return render(request, 'admin/restic/restic.html', ctx)

@@ -13,7 +13,6 @@ logger = logging.getLogger(__name__)
 
 def restic_check() -> bool:
     try:
-        breakpoint()
         if which("restic"):
             return True
         else:
@@ -24,7 +23,6 @@ def restic_check() -> bool:
 
 
 def download_restic() -> None:
-    breakpoint()
     github_json = json.loads(
         requests.get(
             "https://api.github.com/repos/restic/restic/releases/latest"
@@ -47,7 +45,6 @@ def download_restic() -> None:
 
     filename = os.path.basename(os.path.normpath(download_url))
     file = requests.get(download_url, allow_redirects=True).content
-    breakpoint()
     hash = hashlib.sha256(file).hexdigest()
     checksums = requests.get(checksum_url, allow_redirects=True)
     checksum_found = False
