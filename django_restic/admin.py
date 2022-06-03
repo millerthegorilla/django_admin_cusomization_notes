@@ -4,8 +4,26 @@ from django.db import models
 
 from . import views
 
-class tcptraceroute(object):
-    param1: str = "hello world"
+# add form to existing admin model
+# from django.contrib.admin.helpers import ActionForm
+# from django import forms
+
+
+# class XForm(ActionForm):
+#     _pack_choice = forms.FloatField(max_value=100, min_value=0, required=False)
+
+# @admin.register(UserProductImage)
+# class ConsignmentAdmin(admin.ModelAdmin):
+
+#     action_form = XForm
+#     actions = ['change_status']
+
+#     def change_status(modeladmin, request, queryset):
+#         print(request.POST['_pack_choice'])
+#         for obj in queryset:
+#             print(obj)
+#     change_status.short_description = "Change status according to the field"
+
 
 class CustomAdminSite(admin.AdminSite):
     # def __init__(self):
